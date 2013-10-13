@@ -1,0 +1,13 @@
+{
+    "id": "shares"
+  , "shares": {
+        "www": {
+			"comment": "Web directory for projects"
+          , "create mask": "0644"
+		  , "directory mask": "0775"
+          , "writeable": "yes"
+          , "browsable": "yes"
+          , "path": "/www/"
+        }
+    }
+}
