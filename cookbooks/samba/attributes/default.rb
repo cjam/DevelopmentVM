@@ -17,9 +17,9 @@
 # limitations under the License.
 
 default["samba"]["workgroup"] = "SAMBA"
-default["samba"]["interfaces"] = "lo 127.0.0.1"
-default["samba"]["hosts_allow"] = "127.0.0.0/8"
-default["samba"]["bind_interfaces_only"] = "no"
+default["samba"]["interfaces"] = "lo eth1"
+#default["samba"]["hosts_allow"] = "127.0.0.0/8"
+default["samba"]["bind_interfaces_only"] = "true"
 default["samba"]["server_string"] = "Samba Server"
 default["samba"]["load_printers"] = "no"
 default["samba"]["passdb_backend"] = "tdbsam"
