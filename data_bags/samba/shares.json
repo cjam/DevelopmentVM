@@ -3,11 +3,14 @@
   , "shares": {
         "www": {
 			"comment": "Web directory for projects"
-          , "create mask": "0644"
+          , "create mask": "0664"
 		  , "directory mask": "0775"
           , "writeable": "yes"
           , "browsable": "yes"
           , "path": "/www/"
+		  , "guest ok": "yes"
+		  , "follow symlinks": "yes"
+		  , "wide links": "yes"
         }
     }
 }
