@@ -1,5 +1,8 @@
 # Puppet provisioning for Virtual Machine for Nodejs / meteorjs development 
  
+# Good resource for using classes inside the manifest
+# http://docs.puppetlabs.com/puppet/2.7/reference/lang_classes.html#declaring-a-class-with-include
+ 
 # Disable firewall since this is a DEV box, but this should be changed for production obviously
 service { "iptables":
 	ensure => "stopped",
@@ -70,10 +73,14 @@ exec { "enable_samba_user":
 #  before => Package["express"]
 #}
 
-include epel
+class{"epel":
+	require => Class["samba::server"],
+}
 
 # install nodejs
-include nodejs
+class{"nodejs":
+	require => Class["epel"],
+}
 
 
 class meteor() {
