@@ -31,8 +31,6 @@ You will then need to clone this repository into a folder on your machine and do
     \\192.168.7.7\WWW
 	
 
-
-
 ### Other OS
 
 - I'm not sure, because i'm using Windows.. but its likely very similar and steps can be found on Vagrants website
@@ -66,6 +64,9 @@ correctly installs and sets permissions on the executables to be sandboxed to th
 I think it would also be prudent to create a Production style machine that has SELinux and firewalls enabled.  
 
 More investigation is needed however to make this VM scalable in a cloud setting.. however, this is a good first step towards that.
+
+It would also be good to throw a user name and password on the samba share of the vm, but it shouldn't matter right now since it is configured
+with a host-only network adapter.
 
 
 
