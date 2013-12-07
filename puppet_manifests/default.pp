@@ -17,7 +17,7 @@ group { "developer":
 user { "developer":
 	ensure => "present",
 	managehome => "true",
-	password => sha1('devpass'),
+	password => sha1("devpass"),
 	gid => "developer",
 	require => Group["developer"]
 }
@@ -47,7 +47,8 @@ class { 'samba::server':
 	  'path = /www/',
       'browseable = yes',
       'writable = yes',
-	  'guest ok = yes',
+	  'guest ok = no',
+	  'valid users = vagrant, developer',
 	  'follow symlinks = yes',
 	  'wide links = yes',
 	  'available = yes',
