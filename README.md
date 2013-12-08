@@ -1,6 +1,5 @@
 # Development Box
 
----
 
 A ***CENTOS 6.4*** based virtual machine that is created and managed by Vagrant and provisioned using Puppet.
 Made to provide a consistent development environment for all of the project I feel like working on.
@@ -9,7 +8,6 @@ Made to provide a consistent development environment for all of the project I fe
 
 ## Requirements
 
----
 
 You will need to install ***Vagrant***:
 
@@ -24,17 +22,17 @@ You will then need to clone this repository into a folder on your machine and do
 - Traverse into the root of the cloned project's folder
 - Type into the command prompt:
 
-    vagrant up
+    ***vagrant up***
 	
 - Once the machine has booted up, you should be able to access it's samba share at:
 
-    \\192.168.7.7\WWW  (User: vagrant, password: `blank`)
+    ***\\192.168.7.7\WWW***  (User: vagrant, password: `blank`)
 	
 - You can also ssh into the machine using vagrant.  In the command prompt that you used to ***Vagrant up*** the vm, use the following command
 
-    vagrant ssh
+    ***vagrant ssh***
 	
-Have fun :)
+- Have fun :)
 
 ### Other OS
 
@@ -44,7 +42,6 @@ Have fun :)
 
 ## Current Provisioning
 
----
 
 - Network address of VM: ***192.168.7.7***
 - ***Disables the firewall*** since this is a development box
@@ -62,7 +59,6 @@ Have fun :)
 
 ## Future Improvements
 
----
 
 I think it would be best if a separate user was created (i.e. Developer) and was used to install Nodejs, NPM and Meteor so that it 
 correctly installs and sets permissions on the executables to be sandboxed to that user.  
