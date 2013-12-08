@@ -9,7 +9,7 @@ Made to provide a consistent development environment for all of the project I fe
 ## Requirements
 
 
-You will need to install ***Vagrant***:
+You will need to install ***Vagrant***: (See below for OS specific versions)
 
 [Vagrant](http://docs.vagrantup.com/v2/getting-started/)
 
@@ -17,6 +17,11 @@ You will then need to clone this repository into a folder on your machine and do
 
 
 ### Windows
+
+You'll need the following:
+
+*** Vagrant 1.3.5 ***
+*** Virtual Box 4.2.2 *** 
 
 - Open up command prompt as ***Administrator***
 - Traverse into the root of the cloned project's folder

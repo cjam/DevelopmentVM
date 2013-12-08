@@ -74,6 +74,16 @@ exec { "enable_samba_user":
 #  before => Package["express"]
 #}
 
+package{"git":
+	ensure => present,
+	before => Class["epel"],
+}
+
+package{"subversion":
+	ensure => present,
+	before => Class["epel"],
+}
+
 class{"epel":
 	require => Class["samba::server"],
 }
