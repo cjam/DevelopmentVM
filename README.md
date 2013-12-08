@@ -28,8 +28,13 @@ You will then need to clone this repository into a folder on your machine and do
 	
 - Once the machine has booted up, you should be able to access it's samba share at:
 
-    \\192.168.7.7\WWW
+    \\192.168.7.7\WWW  (User: vagrant, password: `blank`)
 	
+- You can also ssh into the machine using vagrant.  In the command prompt that you used to ***Vagrant up*** the vm, use the following command
+
+    vagrant ssh
+	
+Have fun :)
 
 ### Other OS
 
@@ -46,10 +51,11 @@ You will then need to clone this repository into a folder on your machine and do
 - Creates a ***WWW*** directory in the root file system
 -- Sets the Owner and group to ***Vagrant***
 - Installs and configures ***Samba***
--- Insecure setup which shares the ***WWW*** directory with everyone
+-- Setup shares the ***WWW*** directory (User: vagrant, password: `blank`)
 - Sets up ***EPEL*** repositories
 - Installs ***Nodejs***
 - Installs ***NPM***
+- Installs ***Meteorite*** (Meteor Package Manager)
 - Installs ***MeteorJS***
 
 

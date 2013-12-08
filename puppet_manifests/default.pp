@@ -83,13 +83,18 @@ class{"nodejs":
 	require => Class["epel"],
 }
 
+package { "meteorite":
+	ensure => present,
+	provider => 'npm',
+	require => [Package['npm'], Package['nodejs']],
+}
 
 class meteor() {
 	exec { "install_meteor":
 		environment => ["HOME=/home/vagrant/"],
 		command => "/usr/bin/curl https://install.meteor.com | /bin/sh",
 		user => vagrant,
-		require => [Package['npm'], Package['nodejs']]
+		require => Package['meteorite'],
 	}
 }
 
