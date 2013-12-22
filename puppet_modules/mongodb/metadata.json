@@ -1,0 +1,54 @@
+{
+  "name": "puppetlabs-mongodb",
+  "version": "0.4.0",
+  "source": "git@github.com:puppetlabs/puppetlabs-mongodb.git",
+  "author": "puppetlabs",
+  "license": "Apache License Version 2.0",
+  "summary": "mongodb puppet module",
+  "description": "10gen mongodb puppet module",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-mongodb",
+  "dependencies": [
+    {
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 2.2.0"
+    }
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "CHANGELOG": "5f66955b867f38eabe036af074810f40",
+    "Gemfile": "9ed4e2f4cfc1722bf8983483cb7e40d3",
+    "LICENSE": "b3f8a01d8699078d82e8c3c992307517",
+    "Modulefile": "50f5e144476dd1aedd9f049d0dc5b3d6",
+    "README.md": "07fe7973016520c422d306156d8062d5",
+    "Rakefile": "0428ea3759a4692c91604396c406a9c1",
+    "manifests/globals.pp": "600d8923fc55a6daaeb8832e558d479c",
+    "manifests/init.pp": "53eea67456b249bb6259963e5256a7ce",
+    "manifests/params.pp": "0c62018db94ecfcd82264a7ed92a5ba9",
+    "manifests/repo/apt.pp": "3a6235c6e1b83b4ba41e52cbfdc6ba31",
+    "manifests/repo/yum.pp": "0aa5725de002581554b2050e9a1e0656",
+    "manifests/repo.pp": "23b342a75ec156eb9118b07a47086563",
+    "manifests/server/config.pp": "78b62b9aa3759682c4a4f0bf70ef3fed",
+    "manifests/server/install.pp": "95ba8e7a1227163d45427338407b25df",
+    "manifests/server/service.pp": "c79706e48c0635ba72f47a7edef697d3",
+    "manifests/server.pp": "671f2a0739b835cc31dda845fc3bfd97",
+    "spec/classes/repo_spec.rb": "c0ffab073e47ec187d43e2d0ec9762e8",
+    "spec/classes/server_config_spec.rb": "139e54f5646af132aa96da5e683397f8",
+    "spec/classes/server_install_spec.rb": "1e19688c0e2a59c2dedb8116b94eae1a",
+    "spec/classes/server_spec.rb": "e41eafd9f4d458d7730f21ee20849fe5",
+    "spec/spec_helper.rb": "0db89c9a486df193c0e40095422e19dc",
+    "spec/spec_helper_system.rb": "0e2c886ed3570f4491401a0ceccdf762",
+    "spec/system/basic_spec.rb": "0a5b33d18254bedcb7886e34846ebff6",
+    "spec/system/server_10gen_spec.rb": "e6eca5c8001740d20c4611debb99ca35",
+    "spec/system/server_distro_spec.rb": "b051637d82059a884fd2056e0a876989",
+    "templates/mongodb.conf.erb": "446e9521a48df24e787c47603bff9a10",
+    "tests/globals.pp": "1b274b3a5fe7d2347f2f70f285dd7518",
+    "tests/init.pp": "9a09da130383dc0c05eded5ef0744876",
+    "tests/server.pp": "0b47cb9016186fda7c0dc3a66d03d667"
+  }
+}

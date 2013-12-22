@@ -78,38 +78,22 @@ package{"subversion":
 	before => Class["epel"],
 }
 
+
+# Installs MongoDB Server
+class { '::mongodb::server':
+	port => 27017,
+	before => Class["epel"],
+}
+
 class{"epel":
 	require => Class["samba::server"],
 }
-
-# install mongo
-#class { 'mongodb':
-#  use_10gen  => true,
-#  before => Class["nodejs"],
-#}
 
 # install nodejs
 class{"nodejs":
 	require => Class["epel"],
 }
 
-package { "meteorite":
-	ensure => present,
-	provider => 'npm',
-	require => [Package['npm'], Package['nodejs']],
-}
-
-class meteor() {
-	exec { "install_meteor":
-		environment => ["HOME=/home/vagrant/"],
-		command => "/usr/bin/curl https://install.meteor.com | /bin/sh",
-		user => vagrant,
-		require => Package['meteorite'],
-	}
-}
-
-# use the meteor class defined above
-include meteor
 
 
 
