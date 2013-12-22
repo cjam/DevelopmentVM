@@ -68,12 +68,6 @@ exec { "enable_samba_user":
 	require => Exec["create_samba_user"],
 }
 
-# install mongo
-#class { 'mongodb':
-#  use_10gen  => true,
-#  before => Package["express"]
-#}
-
 package{"git":
 	ensure => present,
 	before => Class["epel"],
@@ -87,6 +81,12 @@ package{"subversion":
 class{"epel":
 	require => Class["samba::server"],
 }
+
+# install mongo
+#class { 'mongodb':
+#  use_10gen  => true,
+#  before => Class["nodejs"],
+#}
 
 # install nodejs
 class{"nodejs":

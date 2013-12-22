@@ -60,6 +60,7 @@ You'll need the following:
 - Installs ***Meteorite*** (Meteor Package Manager)
 - Installs ***MeteorJS***
 
+We should probably try to get mongodb installed here.  Will need to fool around with some puppet packages.
 
 
 ## Future Improvements
