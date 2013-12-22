@@ -78,15 +78,14 @@ package{"subversion":
 	before => Class["epel"],
 }
 
+class{"epel":
+	require => Class["samba::server"],
+}
 
 # Installs MongoDB Server
 class { '::mongodb::server':
 	port => 27017,
-	before => Class["epel"],
-}
-
-class{"epel":
-	require => Class["samba::server"],
+	require => Class["epel"],
 }
 
 # install nodejs
