@@ -93,6 +93,20 @@ class{"nodejs":
 	require => Class["epel"],
 }
 
+package { 'mocha':
+  ensure   => present,
+  provider => 'npm',
+  require => Class["nodejs"],
+}
+
+package { 'grunt-cli':
+  ensure   => present,
+  provider => 'npm',
+  require => Class["nodejs"],
+}
+
+
+
 
 
 
