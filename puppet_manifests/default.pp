@@ -105,6 +105,12 @@ package { 'grunt-cli':
   require => Class["nodejs"],
 }
 
+package { 'node-inspector':
+  ensure   => present,
+  provider => 'npm',
+  require => Class["nodejs"],
+}
+
 
 
 
