@@ -41,7 +41,7 @@ You'll need the following:
 
 ### Other OS
 
-- I'm not sure, because i'm using Windows.. but its likely very similar and steps can be found on Vagrants website
+- I'm not sure, because I'm using Windows.. but its likely very similar and steps can be found on Vagrants website
 
 
 
@@ -55,12 +55,18 @@ You'll need the following:
 - Installs and configures ***Samba***
 -- Setup shares the ***WWW*** directory (User: vagrant, password: `blank`)
 - Sets up ***EPEL*** repositories
+- Installs ***mongodb*** server
 - Installs ***Nodejs***
 - Installs ***NPM***
-- Installs ***Meteorite*** (Meteor Package Manager)
-- Installs ***MeteorJS***
 
-We should probably try to get mongodb installed here.  Will need to fool around with some puppet packages.
+Installs the following NPM packages Globally:
+
+- Karma test runner
+- Mocha test runner
+- Instanbul javascript code coverage
+- PhantomJS
+- Grunt-cli
+- node-inspector
 
 
 ## Future Improvements

@@ -93,18 +93,52 @@ class{"nodejs":
 	require => Class["epel"],
 }
 
-package { 'mocha':
-  ensure   => present,
+# Test runner
+package { 'karma':
+  ensure => present,
   provider => 'npm',
   require => Class["nodejs"],
 }
 
+# Test Suite
+package { 'mocha':
+  ensure => present,
+  provider => 'npm',
+  require => Class["nodejs"],
+}
+
+# Code Coverage
+package { 'instanbul':
+  ensure => present,
+  provider => 'npm',
+  require => Class["nodejs"],
+}
+
+### Phantom JS
+package { 'phantomjs':
+  ensure => present,
+  provider => 'npm',
+  require => Class["nodejs"],
+}
+
+package{"freetype":
+	ensure => present,
+	before => Package["phantomjs"],
+}
+
+package{"fontconfig":
+	ensure => present,
+	before => Package["phantomjs"],
+}
+
+### Task Runner
 package { 'grunt-cli':
   ensure   => present,
   provider => 'npm',
   require => Class["nodejs"],
 }
 
+### node debugging
 package { 'node-inspector':
   ensure   => present,
   provider => 'npm',
