@@ -82,11 +82,12 @@ class{"epel":
 	require => Class["samba::server"],
 }
 
-# Installs MongoDB Server
-class { '::mongodb::server':
-	port => 27017,
-	require => Class["epel"],
-}
+# Installs MongoDB Server & client
+class {'::mongodb::globals':
+  manage_package_repo => true,
+}->
+class {'::mongodb::server': }->
+class {'::mongodb::client': }
 
 # install nodejs
 class{"nodejs":

@@ -21,11 +21,11 @@ pidfilepath = <%= @pidfilepath %>
 <% end -%>
 <% if @nojournal -%>
 # Disables write-ahead journaling
-nojournal = <%= @nojournal %> 
+nojournal = <%= @nojournal %>
 <% end -%>
 <% if @journal -%>
 # Enables journaling
-journal = <%= @journal %> 
+journal = <%= @journal %>
 <% end -%>
 <% if @cpu -%>
 # Enables periodic logging of CPU utilization and I/O wait
@@ -158,4 +158,7 @@ keyFile = <%= @keyfile %>
 <% end -%>
 <% if @directoryperdb -%>
 directoryperdb = <%= @directoryperdb %>
+<% end -%>
+<% if @set_parameter -%>
+setParameter = <%= @set_parameter %>
 <% end -%>

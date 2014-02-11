@@ -20,7 +20,7 @@ Installs MongoDB on RHEL/Ubuntu/Debian from OS repo, or alternatively from
 ### Deprecation Warning ###
 
 This release is a major refactoring of the module which means that the API may
-have changed in backwards incompatible ways. If your project depends on the old API, 
+have changed in backwards incompatible ways. If your project depends on the old API,
 please pin your dependencies to 0.3 version to ensure your environments don't break.
 
 The current module design is undergoing review for potential 1.0 release. We welcome
@@ -28,10 +28,14 @@ any feedback with regard to the APIs and patterns used in this release.
 
 ##Module Description
 
-The MongoDB module manages mongod server installation and configuration of the mongod daemon. For the time being it supports only a single
-MongoDB server instance, without sharding and  limited replica set 
-functionality (you can define the replica set parameter in the config file, however
-rs.initiate() has to be done manually).
+The MongoDB module manages mongod server installation and configuration of the
+mongod daemon. For the time being it supports only a single MongoDB server
+instance, without sharding functionality.
+
+For the 0.5 release, the MongoDB module now supports database and user types.
+
+For the 0.6 release, the MongoDB module now supports basic replicaset features
+(initiating a replicaset and adding members, but without specific options).
 
 ## Setup
 
@@ -40,12 +44,13 @@ rs.initiate() has to be done manually).
 * MongoDB package.
 * MongoDB configuration files.
 * MongoDB service.
+* MongoDB client.
 * 10gen/mongodb apt/yum repository.
 
 ###Beginning with MongoDB
 
 If you just want a server installation with the default options you can run
-`include '::mongodb:server'`. If you need to customize configuration
+`include '::mongodb::server'`. If you need to customize configuration
 options you need to do the following:
 
 ```puppet
@@ -55,7 +60,16 @@ class {'::mongodb::server':
 }
 ```
 
-Although most distro comes with a prepacked MongoDB server we recommend to
+For Red Hat family systems, the client can be installed in a similar fashion:
+
+```
+puppet class {'::mongodb::client':}
+```
+
+Note that for Debian/Ubuntu family systems the client is installed with the 
+server. Using the client class will by default install the server.
+
+Although most distros come with a prepacked MongoDB server we recommend to
 use the 10gen/MongoDB software repository, because most of the current OS
 packages are outdated and not appropriate for a production environment.
 To install MongoDB from 10gen repository:
@@ -64,18 +78,35 @@ To install MongoDB from 10gen repository:
 class {'::mongodb::globals':
   manage_package_repo => true,
 }->
-class {'::mongodb::server': }
+class {'::mongodb::server': }->
+class {'::mongodb::client': }
 ```
 
 ## Usage
 
 Most of the interaction for the server is done via `mongodb::server`. For
-more options please have a look at [monogbd::server](#class-mongodbserver).
+more options please have a look at [mongodb::server](#class-mongodbserver).
 Also in this version we introduced `mongodb::globals`, which is meant more
 for future implementation, where you can configure the main settings for
-this module in a global way, to be used by other classes and defined resources. 
+this module in a global way, to be used by other classes and defined resources.
 On its own it does nothing.
 
+### Create MongoDB database
+
+To install MongoDB server, create database "testdb" and user "user1" with password "pass1".
+
+```puppet
+class {'::mongodb::server':
+  auth => true,
+}
+
+mongodb::db { 'testdb':
+  user          => 'user1',
+  password_hash => 'a15fbfca5e3a758be80ceaf42458bcd8',
+}
+```
+Parameter 'password_hash' is hex encoded md5 hash of "user1:mongo:pass1".
+Unsafe plain text password could be used with 'password' parameter instead of 'password_hash'.
 
 ## Reference
 
@@ -83,7 +114,8 @@ On its own it does nothing.
 
 ####Public classes
 * `mongodb::server`: Installs and configure MongoDB
-* `mongodb::globals`: Configure main settings on a global way
+* `mongodb::client`: Installs the MongoDB client shell (for Red Hat family systems)
+* `mongodb::globals`: Configure main settings in a global way
 
 ####Private classes
 * `mongodb::repo`: Manage 10gen/MongoDB software repository
@@ -92,7 +124,7 @@ On its own it does nothing.
 * `mongodb::server::config`: Configures MongoDB configuration files
 * `mongodb::server::install`: Install MongoDB software packages
 * `mongodb::server::service`: Manages service
-
+* `mongodb::client::install`: Installs the MongoDB client software package
 
 ####Class: mongodb::globals
 *Note:* most server specific defaults should be overridden in the `mongodb::server`
@@ -103,7 +135,6 @@ can only be changed here.
 This class allows you to configure the main settings for this module in a
 global way, to be used by the other classes and defined resources. On its
 own it does nothing.
-
 
 #####`server_package_name`
 This setting can be used to override the default MongoDB server package
@@ -138,20 +169,19 @@ the default for your OS distro.
 This setting can be used to configure MonogDB process to bind to and listen
 for connections from applications on this address. If not specified, the
 module will use the default for your OS distro.
-*Note:* This value should be passed an an array.
+*Note:* This value should be passed as an array.
 
 #####`version`
 The version of MonogDB to install/manage. This is a simple way of providing
 a specific version such as '2.2' or '2.4' for example. If not specified,
 the module will use the default for your OS distro.
 
-
-
 ####Class: mongodb::server
 
-Most of the parameters manipulates the mongod.conf file. 
+Most of the parameters manipulate the mongod.conf file.
 
-For more details about configuration parameters consult the [MongoDB Configuration File Options](http://docs.mongodb.org/manual/reference/configuration-options/).
+For more details about configuration parameters consult the
+[MongoDB Configuration File Options](http://docs.mongodb.org/manual/reference/configuration-options/).
 
 #####`ensure`
 enable or disable the service
@@ -177,18 +207,18 @@ to the standard output.
 Set this option to configure the mongod or mongos process to bind to and listen
 for connections from applications on this address. If not specified, the module
 will use the default for your OS distro. Example: bind_ip=['127.0.0.1', '192.168.0.3']
-*Note*: bind_ip accept array as a value. 
+*Note*: bind_ip accepts an array as a value.
 
 #####`logappend`
 Set to true to add new entries to the end of the logfile rather than overwriting
 the content of the log when the process restarts. Default: True
 
 #####`fork`
-Set to true to enable database authentication for users connecting from remote
-hosts. If not specified, the module will use the default for your OS distro.
+Set to true to fork server process at launch time. The default setting depends on
+the operating system.
 
 #####`port`
-Specifies a TCP port for the server instance to listen for client connections. 
+Specifies a TCP port for the server instance to listen for client connections.
 Default: 27017
 
 #####`journal`
@@ -197,13 +227,13 @@ data consistency. Default: on 64-bit systems true and on 32-bit systems false
 
 #####`nojournal`
 Set nojournal = true to disable durability journaling. By default, mongod
-enables journaling in 64-bit versions after v2.0. 
+enables journaling in 64-bit versions after v2.0.
 Default: on 64-bit systems  false and on 32-bit systems true
 
 *Note*: You must use journal to enable journaling on 32-bit systems.
 
 #####`smallfiles`
-Set to true to modify MongoDB to use a smaller default data file size. 
+Set to true to modify MongoDB to use a smaller default data file size.
 Specifically, smallfiles reduces the initial size for data files and
 limits them to 512 megabytes.  Default: false
 
@@ -215,7 +245,7 @@ complete (i.e. I/O wait.) Default: false
 #####`auth`
 Set to true to enable database authentication for users connecting from
 remote hosts. If no users exist, the localhost interface will continue
-to have access to the database until you create the first user. 
+to have access to the database until you create the first user.
 Default: false
 
 #####`noauth`
@@ -232,11 +262,11 @@ Default: None
 
 #####`objcheck`
 Forces the mongod to validate all requests from clients upon receipt to ensure
-that clients never insert invalid documents into the database. 
+that clients never insert invalid documents into the database.
 Default: on v2.4 default to true and on earlier version to false
 
 #####`quota`
-Set to true to enable a maximum limit for the number data files each database
+Set to true to enable a maximum limit for the number of data files each database
 can have. The default quota is 8 data files, when quota is true. Default: false
 
 #####`quotafiles`
@@ -245,13 +275,12 @@ Modify limit on the number of data files per database. This option requires the
 
 #####`diaglog`
 Creates a very verbose diagnostic log for troubleshooting and recording various
-errors.  Valid values: 0, 1, 2, 3 and 7. 
+errors.  Valid values: 0, 1, 2, 3 and 7.
 For more information please refer to [MongoDB Configuration File Options](http://docs.mongodb.org/manual/reference/configuration-options/).
 
 #####`directoryperdb`
 Set to true to modify the storage pattern of the data directory to store each
 database’s files in a distinct folder. Default: false
-
 
 #####`profile`
 Modify this value to changes the level of database profiling, which inserts
@@ -264,7 +293,7 @@ that MongoDB will accept. Default: depends on system (i.e. ulimit and file descr
 limits. Unless set, MongoDB will not limit its own connections.
 
 #####`oplog_size`
-Specifies a maximum size in megabytes for the replication operation log 
+Specifies a maximum size in megabytes for the replication operation log
 (e.g. oplog.) mongod creates an oplog based on the maximum amount of space
 available. For 64-bit systems, the oplog is typically 5% of available disk space.
 
@@ -287,8 +316,8 @@ the start up time in some cases, but can cause significant performance penalties
 during normal operations. Default: false
 
 #####`nssize`
-Use this setting to control the default size for all newly created namespace f
-iles (i.e .ns). Default: 16
+Use this setting to control the default size for all newly created namespace
+files (i.e .ns). Default: 16
 
 #####`mms_token`
 MMS token for mms monitoring. Default: None
@@ -307,16 +336,20 @@ set name as an argument to this set. All hosts must have the same set name.
 Set to true to enable a simple REST interface. Default: false
 
 #####`slowms`
-Sets the threshold for mongod to consider a query “slow” for the database profiler. 
+Sets the threshold for mongod to consider a query “slow” for the database profiler.
 Default: 100 ms
 
 #####`keyfile`
-Specify the path to a key file to store authentication information. This option 
+Specify the path to a key file to store authentication information. This option
 is only useful for the connection between replica set members. Default: None
 
 #####`master`
 Set to true to configure the current instance to act as master instance in a
 replication configuration. Default: False  *Note*: deprecated – use replica sets
+
+#####`set_parameter`
+Specify extra configuration file parameters (i.e.
+textSearchEnabled=true). Default: None
 
 #####`slave`
 Set to true to configure the current instance to act as slave instance in a
@@ -325,14 +358,94 @@ replication configuration. Default: false
 
 #####`only`
 Used with the slave option, only specifies only a single database to
-replicate. Default: <> 
+replicate. Default: <>
 *Note*: deprecated – use replica sets
 
 #####`source`
 Used with the slave setting to specify the master instance from which
-this slave instance will replicate. Default: <> 
+this slave instance will replicate. Default: <>
 *Note*: deprecated – use replica sets
 
+### Definitions
+
+#### Definition: mongodb:db
+
+Creates database with user. Resource title used as database name.
+
+#####`user`
+Name of the user for database
+
+#####`password_hash`
+Hex encoded md5 hash of "$username:mongo:$password".
+For more information please refer to [MongoDB Authentication Process](http://docs.mongodb.org/meta-driver/latest/legacy/implement-authentication-in-driver/#authentication-process).
+
+#####`password`
+Plain-text user password (will be hashed)
+
+#####`roles`
+Array with user roles. Default: ['dbAdmin']
+
+### Providers
+
+#### Provider: mongodb_database
+'mongodb_database' can be used to create and manage databases within MongoDB.
+
+```puppet
+mongodb_database { testdb:
+  ensure   => present,
+  tries    => 10,
+  require  => Class['mongodb::server'],
+}
+```
+#####`tries`
+The maximum amount of two second tries to wait MongoDB startup. Default: 10
+
+
+#### Provider: mongodb_user
+'mongodb_user' can be used to create and manage users within MongoDB database.
+
+```puppet
+mongodb_user { testuser:
+  ensure        => present,
+  password_hash => mongodb_password('testuser', 'p@ssw0rd'),
+  database      => testdb,
+  roles         => ['readWrite', 'dbAdmin'],
+  tries         => 10,
+  require       => Class['mongodb::server'],
+}
+```
+#####`password_hash`
+Hex encoded md5 hash of "$username:mongo:$password".
+
+#####`database`
+Name of database. It will be created, if not exists.
+
+#####`roles`
+Array with user roles. Default: ['dbAdmin']
+
+#####`tries`
+The maximum amount of two second tries to wait MongoDB startup. Default: 10
+
+#### Provider: mongodb_replset
+'mongodb_replset' can be used to create and manage MongoDB replicasets.
+
+```puppet
+mongodb_replicaset { rsmain:
+  ensure  => present,
+  members => ['host1:27017', 'host2:27017', 'host3:27017']
+}
+```
+
+Ideally the ```mongodb_replicaset``` resource will be declared on the initial
+desired primary node (arbitrarily the first of the list) and this node will be
+processed once the secondary nodes are up. This will ensure all the nodes are
+in the first configuration of the replicaset, else it will require running
+puppet again to add them.
+
+#####`members`
+Array of 'host:port' of the replicaset members.
+
+It currently only adds members without options.
 
 ## Limitation
 
@@ -345,7 +458,7 @@ This module has been tested on:
 * RHEL 5/6
 * CentOS 5/6
 
-For a for list of tested OS please have a look at the [.nodeset.xml](https://github.com/puppetlabs/puppetlabs-mongodb/blob/master/.nodeset.yml) definition.
+For a full list of tested operating systems please have a look at the [.nodeset.xml](https://github.com/puppetlabs/puppetlabs-mongodb/blob/master/.nodeset.yml) definition.
 
 ## Development
 
@@ -372,7 +485,7 @@ in the Gemfile. To install the necessary gems:
     bundle install --path=vendor
 
 Test setup and teardown is handled with rake tasks, so the
-supported way of running tests is with 
+supported way of running tests is with
 
     bundle exec rake spec
 
@@ -384,12 +497,12 @@ To run the system tests
 
 To run the tests on different operating systems, see the sets available in [.nodeset.xml](https://github.com/puppetlabs/puppetlabs-mongodb/blob/master/.nodeset.yml)
 and run the specific set with the following syntax:
-   
+
     RSPEC_SET=ubuntu-server-12042-x64 bundle exec rake spec:system
 
 ### Authors
 
-We would like to thank everyone who has contributed issues and pull requests to this modules.
-A complete list of contributors can be found on the 
+We would like to thank everyone who has contributed issues and pull requests to this module.
+A complete list of contributors can be found on the
 [GitHub Contributor Graph](https://github.com/puppetlabs/puppetlabs-mongodb/graphs/contributors)
 for the [puppetlabs-mongodb module](https://github.com/puppetlabs/puppetlabs-mongodb).

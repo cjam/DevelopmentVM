@@ -14,13 +14,13 @@ describe 'mongodb::server::config', :type => :class do
   describe 'with default values' do
     let(:pre_condition) {[ "class mongodb::server { $config = '/etc/mongod.conf' $dbpath = '/var/lib/mongo' $ensure = present $user = 'mongod' $group = 'mongod' $port = 29017 $bind_ip = ['0.0.0.0'] $fork = true $logpath ='/var/log/mongo/mongod.log' $logappend = true }",  "include mongodb::server" ]}
 
-    it {     
+    it {
       should contain_file('/etc/mongod.conf').with({
         :mode   => '0644',
         :owner  => 'root',
         :group  => 'root'
       })
-      
+
       should contain_file('/etc/mongod.conf').with_content(/^dbpath=\/var\/lib\/mongo/)
       should contain_file('/etc/mongod.conf').with_content(/bind_ip\s=\s0\.0\.0\.0/)
       should contain_file('/etc/mongod.conf').with_content(/^port = 29017$/)
@@ -46,12 +46,20 @@ describe 'mongodb::server::config', :type => :class do
       should contain_file('/etc/mongod.conf').with_content(/bind_ip\s=\s127\.0\.0\.1\,10\.1\.1\.13/)
     }
   end
-  
+
   describe 'when specifying auth to true' do
     let(:pre_condition) { ["class mongodb::server { $config = '/etc/mongod.conf' $auth = true $dbpath = '/var/lib/mongo' $ensure = present }", "include mongodb::server"]}
-        
+
     it {
       should contain_file('/etc/mongod.conf').with_content(/^auth=true/)
+    }
+  end
+  
+  describe 'when specifying set_parameter value' do
+    let(:pre_condition) { ["class mongodb::server { $config = '/etc/mongod.conf' $set_parameter = 'textSearchEnable=true' $dbpath = '/var/lib/mongo' $ensure = present }", "include mongodb::server"]}
+
+    it {
+      should contain_file('/etc/mongod.conf').with_content(/^setParameter = textSearchEnable=true/)
     }
   end
 
@@ -59,7 +67,7 @@ describe 'mongodb::server::config', :type => :class do
     context 'on true with i686 architecture' do
       let(:pre_condition) { ["class mongodb::server { $config = '/etc/mongod.conf' $dbpath = '/var/lib/mongo' $ensure = present $journal = true }", "include mongodb::server"]}
       let (:facts) { { :architecture => 'i686' } }
-      
+
       it {
         should contain_file('/etc/mongod.conf').with_content(/^journal = true/)
       }

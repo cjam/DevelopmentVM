@@ -55,7 +55,7 @@ You'll need the following:
 - Installs and configures ***Samba***
 -- Setup shares the ***WWW*** directory (User: vagrant, password: `blank`)
 - Sets up ***EPEL*** repositories
-- Installs ***mongodb*** server
+- Installs ***mongodb*** server & client from 10-gen repos
 - Installs ***Nodejs***
 - Installs ***NPM***
 
