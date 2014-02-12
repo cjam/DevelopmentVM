@@ -108,13 +108,6 @@ package { 'mocha':
   require => Class["nodejs"],
 }
 
-# Code Coverage
-package { 'instanbul':
-  ensure => present,
-  provider => 'npm',
-  require => Class["nodejs"],
-}
-
 ### Phantom JS
 package { 'phantomjs':
   ensure => present,
