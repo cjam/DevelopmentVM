@@ -82,11 +82,29 @@ class{"epel":
 	require => Class["samba::server"],
 }
 
+# Create the directory for holding the mongo database
+file{ "/data/":
+	ensure => "directory",
+	owner => "vagrant",
+	group => "vagrant",
+	mode => 755,
+}
+
+file { "/data/db/":
+	ensure => "directory",
+	owner => "vagrant",
+	group => "vagrant",
+	mode => 755,
+	require => File["/data/"]
+}
+
 # Installs MongoDB Server & client
 class {'::mongodb::globals':
   manage_package_repo => true,
+  require => File["/data/db/"],
 }->
-class {'::mongodb::server': }->
+class {'::mongodb::server': 
+}->
 class {'::mongodb::client': }
 
 # install nodejs
