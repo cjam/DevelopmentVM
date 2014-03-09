@@ -83,28 +83,28 @@ class{"epel":
 }
 
 # Create the directory for holding the mongo database
-file{ "/data/":
-	ensure => "directory",
-	owner => "vagrant",
-	group => "vagrant",
-	mode => 755,
-}
+#file{ "/data/":
+#	ensure => "directory",
+#	owner => "mongod",
+#	group => "mongod",
+#	mode => 755,
+#
 
-file { "/data/db/":
-	ensure => "directory",
-	owner => "vagrant",
-	group => "vagrant",
-	mode => 755,
-	require => File["/data/"]
-}
+#file { "/data/db/":
+#	ensure => "directory",
+#	owner => "mongod",
+#	group => "mongod",
+#	mode => 755,
+#	require => File["/data/"]
+#}
 
 # Installs MongoDB Server & client
 class {'::mongodb::globals':
   manage_package_repo => true,
-  require => File["/data/db/"],
 }->
 class {'::mongodb::server':
-  ensure => "running", 
+  ensure => "running",
+  dbpath => "/data/db/"
 }->
 class {'::mongodb::client': }
 
