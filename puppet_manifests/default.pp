@@ -103,7 +103,8 @@ class {'::mongodb::globals':
   manage_package_repo => true,
   require => File["/data/db/"],
 }->
-class {'::mongodb::server': 
+class {'::mongodb::server':
+  ensure => "running", 
 }->
 class {'::mongodb::client': }
 
@@ -152,6 +153,13 @@ package { 'grunt-cli':
 
 ### node debugging
 package { 'node-inspector':
+  ensure   => present,
+  provider => 'npm',
+  require => Class["nodejs"],
+}
+
+### Istanbul Code Coverage
+package { 'istanbul':
   ensure   => present,
   provider => 'npm',
   require => Class["nodejs"],

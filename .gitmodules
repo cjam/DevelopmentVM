@@ -1,0 +1,3 @@
+[submodule "Projects/LyricFlow"]
+	path = Projects/LyricFlow
+	url = https://github.com/cjam/LyricFlow.git
