@@ -103,8 +103,6 @@ class {'::mongodb::globals':
   manage_package_repo => true,
 }->
 class {'::mongodb::server':
-  ensure => "running",
-  dbpath => "/data/db/"
 }->
 class {'::mongodb::client': }
 
