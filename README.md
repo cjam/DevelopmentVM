@@ -15,34 +15,37 @@ You will need to install ***Vagrant***: (See below for OS specific versions)
 
 You will then need to clone this repository into a folder on your machine and do the following:
 
-
 ### Windows
 
-You'll need the following:
+You'll need the following installed:
 
-*** Vagrant 1.3.5 ***
-*** Virtual Box 4.2.2 *** 
+***Vagrant (Latest)***
+***Virtual Box (Latest)*** 
 
 - Open up command prompt as ***Administrator***
 - Traverse into the root of the cloned project's folder
 - Type into the command prompt:
 
     ***vagrant up***
-	
-- Once the machine has booted up, you should be able to access it's samba share at:
 
-    ***\\192.168.7.7\WWW***  (User: vagrant, password: `blank`)
-	
-- You can also ssh into the machine using vagrant.  In the command prompt that you used to ***Vagrant up*** the vm, use the following command
+- You can ssh into the machine using vagrant.  In the command prompt that you used to ***Vagrant up*** the vm, use the following command
 
     ***vagrant ssh***
+
+#### File Access
+	
+- Vagrant automatically mounts the root folder that the vagrant file is on the vm that you've just built at the following location:
+	`/vagrant` this file system is good but can do some strange things at times, so i've also set up the following samba share;
+	
+    ***\\192.168.7.7\WWW***  (User: vagrant, password: `blank`)
 	
 - Have fun :)
 
 ### Other OS
 
-- I'm not sure, because I'm using Windows.. but its likely very similar and steps can be found on Vagrants website
+***Worked on Mac OSX when I tried it***
 
+- I'm not sure, because I'm using Windows.. but its likely very similar and steps can be found on Vagrants website
 
 
 ## Current Provisioning
@@ -55,9 +58,10 @@ You'll need the following:
 - Installs and configures ***Samba***
 -- Setup shares the ***WWW*** directory (User: vagrant, password: `blank`)
 - Sets up ***EPEL*** repositories
-- Installs ***mongodb*** server & client from 10-gen repos
+//- Installs ***mongodb*** server & client from 10-gen repos
 - Installs ***Nodejs***
 - Installs ***NPM***
+- Installs PostGres and configures a Database
 
 Installs the following NPM packages Globally:
 

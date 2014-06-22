@@ -163,6 +163,41 @@ package { 'istanbul':
   require => Class["nodejs"],
 }
 
+### Install postgres module
+package { 'pg':
+	ensure => present,
+	provider => 'npm',
+	require => Class["nodejs"],
+	before => Class["postgresql::globals"],
+}
+
+
+### POSTGRES DATABASE ###
+
+# Install PostgreSQL 9.3 server from the PGDG repository
+class {'postgresql::globals':
+  manage_package_repo => true,
+  encoding => 'UTF8',
+  locale  => 'it_IT.utf8',
+}->
+class { 'postgresql::server':
+  ensure => 'present',
+  listen_addresses => '*',
+  manage_firewall => true,
+  postgres_password => '4Devel0pment',
+}
+
+# Install contrib modules
+class { 'postgresql::server::contrib':
+  package_ensure => 'present',
+}
+
+# Setup Dev database
+postgresql::server::db { 'devdb':
+  user     => 'devuser',
+  password => postgresql_password('devuser', 'devpassword'),
+}
+
 
 
 
